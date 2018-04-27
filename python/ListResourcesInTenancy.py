@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #title               :ListResourcesInTenancy.py
-#description     :This script lists resources in an OCI compartment across all regions and availability domains.
+#description     :This script lists resources in an OCI tenancy across all regions and availability domains.
 #author          :Dylan Lobo
 #usage           :python ListResourcesInTenancy.py -h
 #notes           :
