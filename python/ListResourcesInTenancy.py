@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-#title           :ListResourcesInTenancy.py
+#title               :ListResourcesInTenancy.py
 #description     :This script lists resources in an OCI compartment across all regions and availability domains.
 #author          :Dylan Lobo
-#date            :20180425
-#version         :0.9
 #usage           :python ListResourcesInTenancy.py -h
 #notes           :
 #python_version  :3.6.0  
@@ -14,6 +12,10 @@ _type_options = [t for t in _supported_types]
 _type_options.append('all')
 
 class ResourceListPrinter:
+
+  """An abstract base class that provides limited common printing functionality and the initilisation of instance 
+  variables and method signatures of that are implemented by child classes"""
+       
   _oci_mod=None
   _file_handle=None
   _output_format=None
@@ -50,6 +52,8 @@ class ResourceListPrinter:
     raise Exception()    
     
 class ResourceListCsvPrinter(ResourceListPrinter):
+  """A "Template Method" class that orchestrates the printing of Resources in Regions and Compartments 
+  via the printResourcesInRegionsAndCompartments _printResource Template Methods """
 
   def __init__(self,oci_mod,oci_config,file_handle,output_format, csv_header):
     super().__init__(oci_mod,oci_config,file_handle,output_format)
@@ -77,7 +81,8 @@ class ResourceListCsvPrinter(ResourceListPrinter):
    
 
 class ResourceListJsonPrinter(ResourceListPrinter):
-
+  """A generic resource printer class that prints OCI resources in JSON format """
+  
   def _printJson(self,resMap,file_handle):
     print("{",file=file_handle)
     i=0
@@ -106,6 +111,8 @@ class ResourceListJsonPrinter(ResourceListPrinter):
     #print(allResMap,file=self._file_handle)
 
 class ComputeListPrinter(ResourceListPrinter):
+  """Initialises the OCI ComputeClient and implements the Compute resource API call to list_instances """
+  
   _compute_client=None
   
   def _createResourceClient(self):
@@ -134,6 +141,8 @@ class ComputeListJsonPrinter (ComputeListPrinter, ResourceListJsonPrinter):
 
   
 class VcnListPrinter(ResourceListPrinter):
+  """Initialises the OCI VirtualNetworkClient and implements the VCN resource API call to list_vcns """
+  
   _vcn_client=None
   
   def _createResourceClient(self):
@@ -164,6 +173,8 @@ class VcnListJsonPrinter (VcnListPrinter, ResourceListJsonPrinter):
 
 
 class BlockstorageListPrinter(ResourceListPrinter):
+  """Initialises the OCI BlockstorageClient and implements the Blockstorage resource API call to list_volumes """
+  
   _blockstorage_client=None
   
   def _createResourceClient(self):
@@ -192,6 +203,7 @@ class BlockstorageListJsonPrinter (BlockstorageListPrinter, ResourceListJsonPrin
 
 
 class DatabaseSystemListPrinter(ResourceListPrinter):
+  """Initialises the OCI DatabaseClient and implements the DatabaseSystems resource API call to list_list_db_systems """
   _database_client=None
   
   def _createResourceClient(self):
@@ -225,6 +237,7 @@ class DatabaseSystemListJsonPrinter(DatabaseSystemListPrinter, ResourceListJsonP
 
 
 class LoadBalancerListPrinter(ResourceListPrinter):
+  """Initialises the OCI LoadBalancerClient and implements the LoadBalancer resource API call to list_load_balancers """
   _lb_client=None
   
   def _createResourceClient(self):
@@ -351,7 +364,10 @@ class Main:
     with open(filename,"w") as f:
       resource_printer = ResourceListPrinterFactory.getResourceListPrinter(self._oci_mod,self._config,f,self._args)
       if resource_printer is not None:
-        resource_printer.printResourcesInRegionsAndCompartments(self._regions,self._compartments)  
+        resource_printer.printResourcesInRegionsAndCompartments(self._regions,self._compartments)
+      else:
+        print("Unable to instansiate a ResourceListPrinter instant")
+        raise Exception()
 
 
 
