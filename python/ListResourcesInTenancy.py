@@ -14,7 +14,7 @@ _type_options.append('all')
 class ResourceListPrinter:
 
   """An abstract base class that provides limited common printing functionality and the initilisation of instance 
-  variables and method signatures of that are implemented by child classes"""
+  variables and method signatures that are implemented by child classes"""
        
   _oci_mod=None
   _file_handle=None
@@ -53,7 +53,7 @@ class ResourceListPrinter:
     
 class ResourceListCsvPrinter(ResourceListPrinter):
   """A "Template Method" class that orchestrates the printing of Resources in Regions and Compartments 
-  via the printResourcesInRegionsAndCompartments _printResource Template Methods """
+  via the printResourcesInRegionsAndCompartments and _printResource Template Methods """
 
   def __init__(self,oci_mod,oci_config,file_handle,output_format, csv_header):
     super().__init__(oci_mod,oci_config,file_handle,output_format)
@@ -156,7 +156,7 @@ class VcnListPrinter(ResourceListPrinter):
     
 class VcnListCsvPrinter(VcnListPrinter,ResourceListCsvPrinter):
   _csv_header="Region Name,Compartment Name,VCN Display Name,VCN Domain Name,Lifecycle state,VCN OCID"
-  _csv_format_str="{},{},{},{},{}{}"
+  _csv_format_str="{},{},{},{},{},{}"
   
   def __init__(self,oci_mod,oci_config,file_handle,output_format):
     super().__init__(oci_mod,oci_config,file_handle,output_format, self._csv_header)
@@ -203,7 +203,7 @@ class BlockstorageListJsonPrinter (BlockstorageListPrinter, ResourceListJsonPrin
 
 
 class DatabaseSystemListPrinter(ResourceListPrinter):
-  """Initialises the OCI DatabaseClient and implements the DatabaseSystems resource API call to list_list_db_systems """
+  """Initialises the OCI DatabaseClient and implements the DatabaseSystems resource API call to list_db_systems """
   _database_client=None
   
   def _createResourceClient(self):
@@ -219,8 +219,8 @@ class DatabaseSystemListCsvPrinter(DatabaseSystemListPrinter,ResourceListCsvPrin
                           "CPU Core Count,Node Count,Shape,Data Storage Size (Gbs),"
                             "Lifecycle state,DB Edition,License Model,DB System OCID")
   _csv_format_str=("{},{},{},{},"
-                                "{},{},{},{},"
-                                "{},{},{},{}")
+                   "{},{},{},{},"
+                   "{},{},{},{}")
   
   def __init__(self,oci_mod,oci_config,file_handle,output_format):
     super().__init__(oci_mod,oci_config,file_handle,output_format, self._csv_header)
@@ -251,7 +251,7 @@ class LoadBalancerListCsvPrinter(LoadBalancerListPrinter,ResourceListCsvPrinter)
   _csv_header=("Region Name,Compartment Name,Load Balancer Display Name,Is Private,"
                           "Lifecycle state,Shape,Load Balancer OCID")
   _csv_format_str=("{},{},{},{},"
-                                "{},{},{}")
+                   "{},{},{}")
   
   def __init__(self,oci_mod,oci_config,file_handle,output_format):
     super().__init__(oci_mod,oci_config,file_handle,output_format, self._csv_header)
