@@ -324,7 +324,7 @@ def processAllTypes(args,main):
   for type in _supported_types:
     print("Processing {} type".format(type))
     args.res_type = type
-    main.run()
+    main.runWithArgs(args)
   
 class Main:
   _config=None
@@ -350,6 +350,10 @@ class Main:
     #Add the root compartment i.e. the "tenancy" id to the list of compartments
     self._compartments[root_compartment_id]="tenancy"
   
+  def runWithArgs(self,args):
+    self._args = args
+    self.run()
+
   def run(self):
     #Process arguments
     if(self._args.res_type == "all"):
